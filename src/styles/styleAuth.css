@@ -1,0 +1,115 @@
+ * {
+  box-sizing: border-box;
+}
+
+.auth{
+  padding-top: 60px;
+  overflow-y: auto;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Lexend', sans-serif;
+  font-size: 16px;
+}
+
+.auth-container {
+  border: 1px solid grey;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  margin: 30px;
+}
+
+.auth-buttons {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.auth-buttons button {
+  flex: 1; 
+  padding: 15px;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+  border-bottom: 1px solid grey;
+  font-family: 'Lexend', sans-serif;
+  font-size: 16px;
+}
+
+button.active {
+  background-color: white;
+  border-bottom: 5px solid #5409DA;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 20px;
+  max-width: 100%;
+  width: 800px;
+  gap: 10px;
+  background-color: white;
+}
+
+.fila {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+}
+
+label {
+  margin-bottom: 0px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid grey;
+}
+
+input:focus{
+  outline: none;
+  box-shadow: 0 0 5px grey;
+}
+
+button.submit {
+  margin: auto;
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  border: 1px solid grey;
+  width: 25%;
+  background-color: #5409DA;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  color: white;
+  font-family: 'Lexend', sans-serif;
+  font-size: 16px;
+}
+
+button.submit:hover {
+  transform: scale(1.01);
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin: 0px 0px 2px;
+}
+
+.input-error {
+  border: 1px solid red;
+}
