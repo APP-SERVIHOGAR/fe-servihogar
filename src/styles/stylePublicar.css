@@ -1,0 +1,154 @@
+.publicar-page {
+  font-family: 'Lexend', sans-serif;
+  padding-top: 80px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.publicar-titulo {
+  text-align: start;
+  color: #5409DA;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.publicar-form-section {
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  margin-bottom: 20px;
+}
+
+.publicar-subtitulo {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.publicar-label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+  color: #444;
+}
+
+.publicar-input,
+.publicar-select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid grey;
+  font-family: 'Lexend', sans-serif;
+}
+
+.publicar-input:focus,
+.publicar-select:focus {
+  outline: none;
+  box-shadow: 0 0 5px grey;
+}
+
+.publicar-textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  font-family: 'Lexend', sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  margin-bottom: 15px;
+}
+
+.publicar-subsubtitulo {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.publicar-dias-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.publicar-dia-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.publicar-franja {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.publicar-boton-agregar {
+  background-color: #5409DA;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-family: 'Lexend', sans-serif;
+}
+
+.publicar-boton-agregar:hover {
+  background-color: #3e07a9;
+}
+
+.publicar-submit-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.publicar-submit-button {
+  background-color: #5409DA;
+  color: white;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.publicar-submit-button:hover {
+  background-color: #3f07a6;
+}
+
+button[type="button"] {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+button[type="button"]:hover {
+  background-color: #ddd;
+}
+
+.publicar-form-section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: #5409DA;
+}
+
+.publicar-form-section h4 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
