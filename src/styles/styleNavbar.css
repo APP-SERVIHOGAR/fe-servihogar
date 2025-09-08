@@ -1,0 +1,90 @@
+.navbar {
+  position: fixed;       
+  top: 0;                  
+  left: 0;                  
+  width: 100%;    
+  min-height: 60px;        
+  background-color: #f8f9fa;
+  padding: 10px 30px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  font-family: 'Lexend', sans-serif;
+  font-size: 16px;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+}
+
+.navbar-logo {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.navbar-logo a {
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #5409DA;
+}
+
+.navbar-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.navbar-buttons .btn-login{
+  padding: 0.5rem 1rem;
+  color: #5409DA;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: #f8f9fa;
+  font-family: 'Lexend', sans-serif;
+  font-size: 16px;
+}
+
+.navbar-buttons .btn-register{
+  padding: 0.5rem 1rem;
+  background-color: #5409DA;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Lexend', sans-serif;
+  font-size: 16px;
+}
+
+.btn-publicar{
+  padding: 0.5rem 1rem;
+  background-color: #5409DA;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: 'Lexend', sans-serif;
+  font-size: 16px;
+}
+
+.navbar-buttons .btn-register:hover {
+  background-color: #4E71FF;
+}
+
+@media (max-width: 768px) {
+  .navbar-buttons {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+}
