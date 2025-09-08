@@ -9,6 +9,7 @@ function App() {
       <Navbar />
       <Routes>
           <Route path="/registro" element={<AuthPage />} />
+          <Route path="/login" element={<AuthPage />} />
       </Routes>
     </>
   );

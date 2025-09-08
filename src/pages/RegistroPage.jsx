@@ -1,21 +1,54 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import "../styles/styleAuth.css";
 
+
 function RegistroPage() {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useContext(AuthContext);
+
+    useEffect(() => {
+      if (isAuthenticated) {
+        navigate("/");
+      }
+    }, [isAuthenticated, navigate]);
+
     const [formulario, setFormulario] = useState({
     nombre: '',
     apellido: '',
     email: '',
     telefono: '',
+    provincia: '',
+    localidad: '',
     direccion: '',
-    ciudad: '',
     contrasena: '',
     confirmarContrasena: '',
 });
 
-
 const [errores, setErrores] = useState({});
 const [mensaje, setMensaje] = useState("");
+const [tipoMensaje, setTipoMensaje] = useState("");
+const [provincias, setProvincias] = useState([]);
+const [localidades, setLocalidades] = useState([]);
+
+useEffect(() => {
+  fetch("http://localhost:3000/provincia")
+  .then(res => res.json())
+  .then(data => setProvincias(data))
+  .catch(err => console.error("Error cargando provincias:", err));
+}, []);
+
+useEffect(() => {
+    if (formulario.provincia) {
+      fetch(`http://localhost:3000/localidad?id_provincia=${formulario.provincia}`)
+        .then(res => res.json())
+        .then(data => setLocalidades(data))
+        .catch(err => console.error("Error cargando ciudades:", err));
+    }
+  }, [formulario.provincia]);
+
 
 function handleChange(event) {
     setFormulario({
@@ -62,8 +95,12 @@ function validar() {
       errores.direccion = "Este campo es obligatorio";
     }
 
-    if (!formulario.ciudad.trim()) {
-      errores.ciudad = "Este campo es obligatorio";
+    if (!formulario.localidad.trim()) {
+      errores.localidad = "Este campo es obligatorio";
+    }
+
+    if(!formulario.provincia.trim()) {
+      errores.provincia = "Este campo es obligatorio";
     }
 
     if (!contrasena) {
@@ -104,8 +141,8 @@ const handleSubmit = async (e) => {
           apellido: formulario.apellido,
           email: formulario.email,
           telefono: formulario.telefono,
+          localidad: formulario.localidad,
           direccion: formulario.direccion,
-          ciudad: formulario.ciudad,
           contrasena: formulario.contrasena
         }),
       });
@@ -114,6 +151,7 @@ const handleSubmit = async (e) => {
 
        if (response.ok) {
         setMensaje("Usuario registrado correctamente");
+        setTipoMensaje("exito");
         setFormulario({
           nombre: "",
           apellido: "",
@@ -124,18 +162,26 @@ const handleSubmit = async (e) => {
           contrasena: "",
           confirmarContrasena: "",
         });
+
+        setTimeout(() => {
+            navigate("/login");
+        }, 1000);
+
       } else {
         setMensaje(data.message || "Error al registrar usuario");
+        setTipoMensaje("error");
       }
 
       } catch (error) {
       console.error(error);
       setMensaje("Error de conexión con el servidor");
+      setTipoMensaje("error");
     }
 
     } else {
       setErrores(erroresValidacion);
       setMensaje("No se ha podido registrar el usuario");
+      setTipoMensaje("error");
     }
 }
 
@@ -190,16 +236,41 @@ return (
         </div>
       </div>
       <div className='fila'>
+        <div className='campo'>
+            <label>Provincia:</label>
+            <select
+              name="provincia"
+              value={formulario.provincia}
+              onChange={handleChange}
+              className={errores.provincia ? "input-error" : ""}
+            
+            >
+            <option value="">Seleccione una provincia</option>
+            {provincias.map((prov) => (
+              <option key={prov.id} value={prov.id}>
+                {prov.nombre}
+              </option>
+            ))}
+            </select>
+            {errores.provincia && <p className="error">{errores.provincia}</p>}
+        </div>
          <div className='campo'>
-            <label>Ciudad:</label>
-            <input
-            type = "text"
-            name = "ciudad"
-            value = {formulario.ciudad}
-            onChange={handleChange}
-            className={errores.ciudad ? "input-error" : ""}
-            />
-            {errores.ciudad && <p className="error">{errores.ciudad}</p>}
+            <label>Localidad:</label>
+            <select
+              name='localidad'
+              value={formulario.localidad}
+              onChange={handleChange}
+              className={errores.localidad ? "input-error" : ""}
+              disabled={!formulario.provincia}
+            >
+              <option value="">Seleccione una ciudad</option>
+              {localidades.map((loc) => (
+                <option key={loc.id} value={loc.id}>
+                  {loc.nombre}
+                </option>
+              ))}
+            </select>
+            {errores.localidad && <p className="error">{errores.localidad}</p>}
         </div>
         <div className='campo'>
             <label>Dirección:</label>
@@ -239,7 +310,11 @@ return (
       </div>
 
         <button className="submit" type="submit">Crear Cuenta</button>
-
+        {mensaje && (
+            <p className={`mensaje ${tipoMensaje === "exito" ? "exito" : "error"}`}>
+                {mensaje}
+            </p>
+          )}
     </form>
 );
 }

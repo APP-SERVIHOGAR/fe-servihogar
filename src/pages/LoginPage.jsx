@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -6,7 +6,13 @@ import "../styles/styleAuth.css";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login, isAuthenticated } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const [formulario, setFormulario] = useState({
     email: '',
@@ -15,6 +21,7 @@ function LoginPage() {
 
   const [errores, setErrores] = useState({});
   const [mensaje, setMensaje] = useState("");
+  const [tipoMensaje, setTipoMensaje] = useState("");
 
   function handleChange(event) {
     setFormulario({
@@ -66,21 +73,30 @@ function LoginPage() {
         if(response.ok) {
             login(data.token);
             setMensaje("Inicio exitoso.");
+            setTipoMensaje("exito");
             setFormulario({
                 email:"",
                 contrasena:""
             });
+
+            setTimeout(() => {
+            navigate("/");
+        }, 1000);
+
         } else {
-            setMensaje(data.message || "Error iniciar sesión.");
+            setMensaje(data.message || "Correo electrónico o contraseña incorrectos.");
+            setTipoMensaje("error");
         }
     } catch (error) {
         console.error(error);
         setMensaje("Error de conexión con el servidor");
+        setTipoMensaje("error");
     }
 
 } else {
     setErrores(erroresValidacion);
     setMensaje("No se ha podido iniciar sesión");
+    setTipoMensaje("error");
 }
 };
  
@@ -116,7 +132,11 @@ function LoginPage() {
       </div>
 
       <button className="submit" type="submit">Iniciar Sesión</button>
-      {mensaje && <p className="mensaje">{mensaje}</p>}
+      {mensaje && (
+            <p className={`mensaje ${tipoMensaje === "exito" ? "exito" : "error"}`}>
+                {mensaje}
+            </p>
+          )}
     </form>
   );
 }
