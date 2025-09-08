@@ -1,37 +1,36 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Buscador({ onSearch }) {
   const [nombre, setNombre] = useState("");
   const [categoria, setCategoria] = useState("");
+  const [categorias, setCategorias] = useState([]);
   const [provincias, setProvincias] = useState([]);
   const [provinciaSeleccionada, setProvinciaSeleccionada] = useState("");
   const [localidades, setLocalidades] = useState([]);
   const [localidadSeleccionada, setLocalidadSeleccionada] = useState("");
 
+  const navigate = useNavigate();
+
+  useEffect (() => {
+    fetch("http://localhost:3000/categoria")
+    .then((res) => res.json())
+    .then((data) => setCategorias(data))
+    .catch((err) => console.error(err));
+  })
+
   useEffect(() => {
-    fetch("https://apis.datos.gob.ar/georef/api/provincias")
+    fetch("http://localhost:3000/provincia")
       .then((res) => res.json())
-      .then((data) => {
-        const provinciasOrdenadas = data.provincias.sort((a, b) =>
-          a.nombre.localeCompare(b.nombre)
-        );
-        setProvincias(provinciasOrdenadas);
-      })
+      .then((data) => setProvincias(data))
       .catch((err) => console.error(err));
   }, []);
 
   useEffect(() => {
     if (provinciaSeleccionada) {
-      fetch(
-        `https://apis.datos.gob.ar/georef/api/localidades?provincia=${provinciaSeleccionada}&max=100`
-      )
+      fetch(`http://localhost:3000/localidad?id_provincia=${provinciaSeleccionada}`)
         .then((res) => res.json())
-        .then((data) => {
-          const localidadesOrdenadas = data.localidades.sort((a, b) =>
-            a.nombre.localeCompare(b.nombre)
-          );
-          setLocalidades(localidadesOrdenadas);
-        })
+        .then((data) => setLocalidades(data))
         .catch((err) => console.error(err));
     } else {
       setLocalidades([]);
@@ -40,9 +39,19 @@ function Buscador({ onSearch }) {
   }, [provinciaSeleccionada]);
 
   const handleBuscar = () => {
-    if (onSearch) {
-      onSearch({ nombre, categoria, provinciaSeleccionada, localidadSeleccionada });
+    const filtros = {
+      nombre,
+      categoria,
+      provinci: provinciaSeleccionada,
+      localidad: localidadSeleccionada,
     }
+
+    if (onSearch) {
+      onSearch(filtros);
+    }
+
+    const queryString = new URLSearchParams(filtros).toString();
+    navigate(`/resultados?${queryString}`);
   };
 
   return (
@@ -55,10 +64,12 @@ function Buscador({ onSearch }) {
       <div className="form-group">
         <p className="item-text">Categoría:</p>
         <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
-          <option value=""></option>
-          <option value="electricidad">Electricidad</option>
-          <option value="plomería">Plomería</option>
-          <option value="jardinería">Jardinería</option>
+          <option value="">Seleccione una categoría</option>
+          {categorias.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.nombre}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -68,9 +79,9 @@ function Buscador({ onSearch }) {
           value={provinciaSeleccionada}
           onChange={(e) => setProvinciaSeleccionada(e.target.value)}
         >
-          <option value=""></option>
+          <option value="">Seleccione una provincia</option>
           {provincias.map((prov) => (
-            <option key={prov.id} value={prov.nombre}>
+            <option key={prov.id} value={prov.id}>
               {prov.nombre}
             </option>
           ))}
@@ -82,10 +93,11 @@ function Buscador({ onSearch }) {
         <select
           value={localidadSeleccionada}
           onChange={(e) => setLocalidadSeleccionada(e.target.value)}
+          disabled={!provinciaSeleccionada}
         >
-          <option value=""></option>
+          <option value="">Seleccione una localidad</option>
           {localidades.map((loc) => (
-            <option key={loc.id} value={loc.nombre}>
+            <option key={loc.id} value={loc.id}>
               {loc.nombre}
             </option>
           ))}

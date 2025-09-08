@@ -1,0 +1,183 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.home-page{
+    display: flex;
+    flex-direction: column;
+    font-family: 'Lexend', sans-serif;
+    font-size: 16px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding-top: 60px;
+}
+
+.browser {
+  width: 100vw;
+  background: linear-gradient(to right, #5409DA,  #813ef5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  overflow: hidden;
+}
+
+.browser-text {
+  text-align: center;
+  margin-bottom: 30px;
+  color: white;
+}
+
+.browser-text h1 {
+  font-size: 55px;
+  color: white;
+  padding: 10px;
+}
+
+.browser-text p {
+  font-size: 25px;
+  color: white;
+  padding: 20px;
+}
+
+.container-browser {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  width: auto;
+  background-color: #ffffffee;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.item-text{
+    padding-bottom: 10px;
+}
+
+.container-browser input,
+.container-browser select {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.2s;
+  min-width: 250px;
+  max-width: 250px;
+}
+
+.container-browser input:focus,
+.container-browser select:focus {
+  border-color: #5409DA;
+  outline: none;
+  box-shadow: 0 0 5px grey;
+}
+
+.btn-buscar{
+    background-color: #5409DA;
+    color: white;
+    border: 1px solid #5409DA;
+    border-radius: 8px;
+    min-width: 100px;
+    cursor: pointer;
+    padding: 12px;
+    transition: background-color 0.3s ease;
+    font-family: 'Lexend', sans-serif;
+    font-size: 16px;
+}
+
+.btn-buscar:hover{
+    background-color: #4E71FF;
+}
+
+.categories {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 30px;
+  width: 100%;
+}
+
+.categories-text{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.categories-cards{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.card {
+  flex: 1 1 calc(16.66% - 20px); 
+  min-width: 150px;
+  max-width: 100%;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon.plomeria {
+  background-color: rgba(34, 159, 243, 0.4);
+}
+
+.icon.electricidad {
+  background-color: rgba(250, 204, 18, 0.4); 
+}
+
+.icon.costura {
+  background-color: rgba(255, 132, 25, 0.4); 
+}
+
+.icon.limpieza {
+  background-color: rgba(25, 230, 110, 0.4);
+}
+
+.icon.seguridad {
+  background-color: rgba(235, 35, 13, 0.4); 
+}
+
+.icon.programacion {
+  background-color: rgba(180, 39, 235, 0.4); 
+}
+
+
+
