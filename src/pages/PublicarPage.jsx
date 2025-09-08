@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import '../styles/stylePublicar.css'; 
 
 function PublicarServicio() {
@@ -11,6 +13,7 @@ function PublicarServicio() {
     categoria: "",
   });
 
+  const { user } = useContext(AuthContext);
   const [provincias, setProvincias] = useState([]);
   const [localidades, setLocalidades] = useState([]);
   const [categorias, setCategorias] = useState([]);
@@ -76,6 +79,8 @@ function PublicarServicio() {
     Object.keys(formulario).forEach(key => formData.append(key, formulario[key]));
 
     formData.append('disponibilidades', JSON.stringify(disponibilidades));
+
+    formData.append('id_usuario', user.id);
 
     for (let i = 0; i < imagenes.length; i++) {
       formData.append('imagenes', imagenes[i]);
