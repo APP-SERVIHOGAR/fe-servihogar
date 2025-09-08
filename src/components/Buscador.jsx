@@ -42,7 +42,7 @@ function Buscador({ onSearch }) {
     const filtros = {
       nombre,
       categoria,
-      provinci: provinciaSeleccionada,
+      provincia: provinciaSeleccionada,
       localidad: localidadSeleccionada,
     }
 
