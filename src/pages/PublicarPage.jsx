@@ -69,11 +69,27 @@ function PublicarServicio() {
   };
 
   const handleImagenes = e => {
-    setImagenes(e.target.files);
+    const files = Array.from(e.target.files);
+    setImagenes(files);
+
+    
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        console.log("Preview:", ev.target.result); // o podrías guardarlo en un estado
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
+
+    if (!user) {
+    setMensaje("Debes iniciar sesión para publicar un servicio");
+    return;
+  }
+  
     const formData = new FormData();
 
     Object.keys(formulario).forEach(key => formData.append(key, formulario[key]));
