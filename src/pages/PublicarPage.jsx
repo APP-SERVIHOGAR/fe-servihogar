@@ -17,9 +17,9 @@ function PublicarServicio() {
   const [provincias, setProvincias] = useState([]);
   const [localidades, setLocalidades] = useState([]);
   const [categorias, setCategorias] = useState([]);
-  const [disponibilidades, setDisponibilidades] = useState([]);
+  const [dias, setDias] = useState([]);
+  const [selectedDays, setSelectedDays] = useState([]);
   const [imagenes, setImagenes] = useState([]);
-  const diasSemana = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
   const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
@@ -29,6 +29,9 @@ function PublicarServicio() {
     fetch("http://localhost:3000/categoria")
       .then(res => res.json())
       .then(data => setCategorias(data));
+    fetch("http://localhost:3000/dia")
+      .then(res => res.json())
+      .then(data => setDias(data));
   }, []);
 
   useEffect(() => {
@@ -44,22 +47,22 @@ function PublicarServicio() {
   };
 
   const toggleDia = dia => {
-    if (disponibilidades.find(d => d.dia === dia)) {
-      setDisponibilidades(disponibilidades.filter(d => d.dia !== dia));
+    if (selectedDays.find(d => d.idDia === dia.id)) {
+      setSelectedDays(selectedDays.filter(d => d.idDia !== dia.id));
     } else {
-      setDisponibilidades([...disponibilidades, { dia, franjas: [{ inicio: '', fin: '' }] }]);
+      setSelectedDays([...selectedDays, { idDia: dia.id, franjas: [{ inicio: '', fin: '' }] }]);
     }
   };
 
-  const agregarFranja = dia => {
-    setDisponibilidades(disponibilidades.map(d => 
-      d.dia === dia ? { ...d, franjas: [...d.franjas, { inicio: '', fin: '' }] } : d
+  const agregarFranja = idDia => {
+    setSelectedDays(selectedDays.map(d => 
+      d.idDia === idDia ? { ...d, franjas: [...d.franjas, { inicio: '', fin: '' }] } : d
     ));
   };
 
-  const actualizarFranja = (dia, index, campo, valor) => {
-    setDisponibilidades(disponibilidades.map(d => {
-      if (d.dia === dia) {
+  const actualizarFranja = (idDia, index, campo, valor) => {
+    setSelectedDays(selectedDays.map(d => {
+      if (d.idDia === idDia) {
         const nuevas = [...d.franjas];
         nuevas[index][campo] = valor;
         return { ...d, franjas: nuevas };
@@ -72,12 +75,9 @@ function PublicarServicio() {
     const files = Array.from(e.target.files);
     setImagenes(files);
 
-    
     files.forEach(file => {
       const reader = new FileReader();
-      reader.onload = ev => {
-        console.log("Preview:", ev.target.result); // o podrías guardarlo en un estado
-      };
+      reader.onload = ev => console.log("Preview:", ev.target.result);
       reader.readAsDataURL(file);
     });
   };
@@ -86,16 +86,13 @@ function PublicarServicio() {
     e.preventDefault();
 
     if (!user) {
-    setMensaje("Debes iniciar sesión para publicar un servicio");
-    return;
-  }
-  
+      setMensaje("Debes iniciar sesión para publicar un servicio");
+      return;
+    }
+
     const formData = new FormData();
-
     Object.keys(formulario).forEach(key => formData.append(key, formulario[key]));
-
-    formData.append('disponibilidades', JSON.stringify(disponibilidades));
-
+    formData.append('dias', JSON.stringify(selectedDays));
     formData.append('id_usuario', user.id);
 
     for (let i = 0; i < imagenes.length; i++) {
@@ -153,27 +150,27 @@ function PublicarServicio() {
 
       <div className="publicar-form-section">
         <h2>Días y horarios</h2>
-        {diasSemana.map(d => (
-          <label key={d}>
+        {dias.map(d => (
+          <label key={d.id}>
             <input
               type="checkbox"
-              checked={!!disponibilidades.find(dd => dd.dia === d)}
+              checked={!!selectedDays.find(dd => dd.idDia === d.id)}
               onChange={() => toggleDia(d)}
             />
-            {d}
+            {d.nombre}
           </label>
         ))}
 
-        {disponibilidades.map(d => (
-          <div key={d.dia}>
-            <h4>{d.dia}</h4>
+        {selectedDays.map(d => (
+          <div key={d.idDia}>
+            <h4>{dias.find(day => day.id === d.idDia)?.nombre}</h4>
             {d.franjas.map((f, i) => (
               <div key={i}>
-                <input type="time" value={f.inicio} onChange={e => actualizarFranja(d.dia, i, 'inicio', e.target.value)} />
-                <input type="time" value={f.fin} onChange={e => actualizarFranja(d.dia, i, 'fin', e.target.value)} />
+                <input type="time" value={f.inicio} onChange={e => actualizarFranja(d.idDia, i, 'inicio', e.target.value)} />
+                <input type="time" value={f.fin} onChange={e => actualizarFranja(d.idDia, i, 'fin', e.target.value)} />
               </div>
             ))}
-            <button type="button" onClick={() => agregarFranja(d.dia)}>Agregar franja</button>
+            <button type="button" onClick={() => agregarFranja(d.idDia)}>Agregar franja</button>
           </div>
         ))}
       </div>
@@ -186,7 +183,7 @@ function PublicarServicio() {
       <button type="submit" className="publicar-submit-button">Publicar servicio</button>
       {mensaje && <p>{mensaje}</p>}
     </form>
-  )
+  );
 }
 
 export default PublicarServicio;
