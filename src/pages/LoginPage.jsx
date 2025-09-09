@@ -71,7 +71,7 @@ function LoginPage() {
         const data = await response.json();
 
         if(response.ok) {
-            login(data.token);
+            login(data.token, data.usuario);
             setMensaje("Inicio exitoso.");
             setTipoMensaje("exito");
             setFormulario({
