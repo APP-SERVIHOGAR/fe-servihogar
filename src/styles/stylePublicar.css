@@ -11,10 +11,13 @@
   text-align: start;
   color: #5409DA;
   font-size: 1.8rem;
-  margin-bottom: 20px;
+  margin: 10px 0px;
 }
 
 .publicar-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   padding: 1rem;
   border-radius: 10px;
   background-color: #f9f9f9;
@@ -51,62 +54,18 @@
   box-shadow: 0 0 5px grey;
 }
 
-.publicar-textarea {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  font-family: 'Lexend', sans-serif;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  resize: vertical;
+.checkboxes {
+  display: flex;
+  align-items: center;
   margin-bottom: 15px;
 }
 
-.publicar-subsubtitulo {
-  margin-top: 10px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
-}
-
-.publicar-dias-checkboxes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.publicar-dia-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.publicar-franja {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.publicar-boton-agregar {
-  background-color: #5409DA;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #5409DA;
   cursor: pointer;
-  margin-top: 10px;
-  font-family: 'Lexend', sans-serif;
-}
-
-.publicar-boton-agregar:hover {
-  background-color: #3e07a9;
-}
-
-.publicar-submit-container {
-  text-align: center;
-  margin-top: 2rem;
+  margin-right: 10px;
 }
 
 .publicar-submit-button {
@@ -124,18 +83,48 @@
   background-color: #3f07a6;
 }
 
-button[type="button"] {
-  background-color: #eee;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 6px 10px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
+
+.franja-dia {
+  margin: 15px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #f9f9f9;
 }
 
-button[type="button"]:hover {
-  background-color: #ddd;
+.franja-dia h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.franja-horarios {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.franja-horarios input[type="time"] {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.franja-dia button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #5409DA;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.franja-dia button:hover {
+  background-color: #574de3;
 }
 
 .publicar-form-section h2 {
@@ -144,11 +133,22 @@ button[type="button"]:hover {
   color: #5409DA;
 }
 
-.publicar-form-section h4 {
-  font-size: 1rem;
-  margin-bottom: 10px;
+.publicar-form-section input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 25px;
+  border: 2px dashed #aaa;
+  border-radius: 12px;
+  background-color: #fafafa;
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+.publicar-form-section input[type="file"]:hover {
+  border-color: #6c63ff;
+  background-color: #f0f0ff;
   color: #333;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
