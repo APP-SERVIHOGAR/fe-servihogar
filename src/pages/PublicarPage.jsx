@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from "react-router-dom";
 import '../styles/stylePublicar.css'; 
 
 function PublicarServicio() {
+  const navigate = useNavigate();
+
   const [formulario, setFormulario] = useState({
     titulo: "",
     descripcion: "",
@@ -13,7 +16,7 @@ function PublicarServicio() {
     categoria: "",
   });
 
-  const { user } = useContext(AuthContext);
+  const { user, isAuthenticated } = useContext(AuthContext);
   const [provincias, setProvincias] = useState([]);
   const [localidades, setLocalidades] = useState([]);
   const [categorias, setCategorias] = useState([]);
@@ -21,6 +24,12 @@ function PublicarServicio() {
   const [selectedDays, setSelectedDays] = useState([]);
   const [imagenes, setImagenes] = useState([]);
   const [mensaje, setMensaje] = useState("");
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     fetch("http://localhost:3000/provincia")
@@ -118,6 +127,7 @@ function PublicarServicio() {
       <h1 className="publicar-titulo">Publicar Servicio</h1>
 
       <div className="publicar-form-section">
+        <h2>Información básica</h2>
         <label>Categoría:</label>
         <select name="categoria" value={formulario.categoria} onChange={handleChange}>
           <option value="">Seleccione</option>
@@ -132,6 +142,7 @@ function PublicarServicio() {
       </div>
 
       <div className="publicar-form-section">
+        <h2>Ubicación</h2>
         <label>Provincia:</label>
         <select name="provincia" value={formulario.provincia} onChange={handleChange}>
           <option value="">Seleccione</option>
@@ -150,33 +161,33 @@ function PublicarServicio() {
 
       <div className="publicar-form-section">
         <h2>Días y horarios</h2>
-        {dias.map(d => (
-          <label key={d.id}>
-            <input
-              type="checkbox"
-              checked={!!selectedDays.find(dd => dd.idDia === d.id)}
-              onChange={() => toggleDia(d)}
-            />
-            {d.nombre}
-          </label>
-        ))}
+          {dias.map(d => (
+            <label key={d.id} className='checkboxes'>
+              <input
+                type="checkbox"
+                checked={!!selectedDays.find(dd => dd.idDia === d.id)}
+                onChange={() => toggleDia(d)}
+              />
+              {d.nombre}
+            </label>
+          ))}
 
-        {selectedDays.map(d => (
-          <div key={d.idDia}>
-            <h4>{dias.find(day => day.id === d.idDia)?.nombre}</h4>
-            {d.franjas.map((f, i) => (
-              <div key={i}>
-                <input type="time" value={f.inicio} onChange={e => actualizarFranja(d.idDia, i, 'inicio', e.target.value)} />
-                <input type="time" value={f.fin} onChange={e => actualizarFranja(d.idDia, i, 'fin', e.target.value)} />
-              </div>
-            ))}
+          {selectedDays.map(d => (
+            <div key={d.idDia} className='franja-dia'>
+              <h4>{dias.find(day => day.id === d.idDia)?.nombre}</h4>
+              {d.franjas.map((f, i) => (
+                <div key={i} className='franja-horarios'>
+                  <input type="time" value={f.inicio} onChange={e => actualizarFranja(d.idDia, i, 'inicio', e.target.value)} />
+                  <input type="time" value={f.fin} onChange={e => actualizarFranja(d.idDia, i, 'fin', e.target.value)} />
+                </div>
+              ))}
             <button type="button" onClick={() => agregarFranja(d.idDia)}>Agregar franja</button>
           </div>
         ))}
       </div>
 
       <div className="publicar-form-section">
-        <label>Imágenes o videos:</label>
+        <h2>Imagenes</h2>
         <input type="file" multiple accept="image/*,video/*" onChange={handleImagenes} />
       </div>
 
