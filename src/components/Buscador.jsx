@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { TextField, FormControl, InputLabel, Select, MenuItem, Button, Box } from "@mui/material";
 
-function Buscador({ onSearch }) {
+function Buscador({ onSearch, variant }) {
   const [nombre, setNombre] = useState("");
   const [categoria, setCategoria] = useState("");
   const [categorias, setCategorias] = useState([]);
@@ -42,7 +43,6 @@ function Buscador({ onSearch }) {
     const filtros = {
       nombre,
       categoria,
-      provincia: provinciaSeleccionada,
       localidad: localidadSeleccionada,
     }
 
@@ -51,66 +51,143 @@ function Buscador({ onSearch }) {
     }
 
     const queryString = new URLSearchParams(filtros).toString();
-    navigate(`/resultados?${queryString}`);
+    navigate(`/verservicio?${queryString}`);
   };
 
   return (
-    <div className="container-browser">
-      <div className="form-group">
-        <p className="item-text">¿Qué servicio necesitas?</p>
-        <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} />
-      </div>
+    <Box
+      sx={{
+      display: "flex",
+      gap: 2,
+      flexWrap: "wrap",
+      bgcolor: "#ffffffee",
+      p: 2,
+      borderRadius: 2,
+      boxShadow: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    }}
+    >
+      <TextField
+        label="¿Qué servicio necesitas?"
+        value={nombre}
+        onChange={(e) => setNombre(e.target.value)}
+        sx={{ 
+          minWidth: 250, 
+          "& .MuiInputLabel-root": {
+            color: "#333",
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "#5409DA",
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "#ccc", 
+            },
+            "&:hover fieldset": {
+              borderColor: "#999", 
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#5409DA", 
+            },
+          },}}
+      />
 
-      <div className="form-group">
-        <p className="item-text">Categoría:</p>
-        <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
-          <option value="">Seleccione una categoría</option>
+      <FormControl sx={{ 
+        minWidth: 250,
+        "& .MuiInputLabel-root": {
+          color: "#333",
+        },
+        "& .MuiInputLabel-root.Mui-focused": {
+          color: "#5409DA",
+        },
+        "& .MuiOutlinedInput-root": {
+          "& fieldset": { borderColor: "#ccc" },
+          "&:hover fieldset": { borderColor: "#999" },
+          "&.Mui-focused fieldset": { borderColor: "#5409DA" },
+        },
+        }}>
+        <InputLabel>Categoría</InputLabel>
+        <Select
+          value={categoria}
+          onChange={(e) => setCategoria(e.target.value)}
+          label="Categoría"
+        >
+          <MenuItem value="">Seleccione una categoría</MenuItem>
           {categorias.map((cat) => (
-            <option key={cat.id} value={cat.id}>
+            <MenuItem key={cat.id} value={cat.id}>
               {cat.nombre}
-            </option>
+            </MenuItem>
           ))}
-        </select>
-      </div>
+        </Select>
+      </FormControl>
 
-      <div className="form-group">
-        <p className="item-text">Provincia:</p>
-        <select
+      <FormControl sx={{ 
+        minWidth: 250,
+        "& .MuiInputLabel-root": {
+          color: "#333",
+        },
+        "& .MuiInputLabel-root.Mui-focused": {
+          color: "#5409DA",
+        },
+        "& .MuiOutlinedInput-root": {
+          "& fieldset": { borderColor: "#ccc" },
+          "&:hover fieldset": { borderColor: "#999" },
+          "&.Mui-focused fieldset": { borderColor: "#5409DA" },
+        },
+         }}>
+        <InputLabel>Provincia</InputLabel>
+        <Select
           value={provinciaSeleccionada}
           onChange={(e) => setProvinciaSeleccionada(e.target.value)}
+          label="Provincia"
         >
-          <option value="">Seleccione una provincia</option>
+          <MenuItem value="">Seleccione una provincia</MenuItem>
           {provincias.map((prov) => (
-            <option key={prov.id} value={prov.id}>
+            <MenuItem key={prov.id} value={prov.id}>
               {prov.nombre}
-            </option>
+            </MenuItem>
           ))}
-        </select>
-      </div>
+        </Select>
+      </FormControl>
 
-      <div className="form-group">
-        <p className="item-text">Localidad:</p>
-        <select
+      <FormControl sx={{ 
+        minWidth: 250,
+        "& .MuiInputLabel-root": {
+          color: "#333",
+        },
+        "& .MuiInputLabel-root.Mui-focused": {
+          color: "#5409DA",
+        },
+        "& .MuiOutlinedInput-root": {
+          "& fieldset": { borderColor: "#ccc" },
+          "&:hover fieldset": { borderColor: "#999" },
+          "&.Mui-focused fieldset": { borderColor: "#5409DA" },
+        }, }}>
+        <InputLabel>Localidad</InputLabel>
+        <Select
           value={localidadSeleccionada}
           onChange={(e) => setLocalidadSeleccionada(e.target.value)}
+          label="Localidad"
           disabled={!provinciaSeleccionada}
         >
-          <option value="">Seleccione una localidad</option>
+          <MenuItem value="">Seleccione una localidad</MenuItem>
           {localidades.map((loc) => (
-            <option key={loc.id} value={loc.id}>
+            <MenuItem key={loc.id} value={loc.id}>
               {loc.nombre}
-            </option>
+            </MenuItem>
           ))}
-        </select>
-      </div>
+        </Select>
+      </FormControl>
 
-      <div className="form-group">
-        <p className="item-text">&nbsp;</p>
-        <button className="btn-buscar" onClick={handleBuscar}>
-          Buscar
-        </button>
-      </div>
-    </div>
+      <Button
+        variant="contained"
+        sx={{ bgcolor: "#5409DA",  height: "56px",  "&:hover": { bgcolor: "#4E71FF" } }}
+        onClick={handleBuscar}
+      >
+        Buscar
+      </Button>
+    </Box>
   );
 }
 

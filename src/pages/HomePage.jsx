@@ -16,7 +16,7 @@ function Home () {
                     <h1>Encuentra profesionales de confianza cerca de ti</h1>
                     <p>Plomería, electricidad, costura y muchos servicios más a un click de distancia</p>
                 </div>
-                <Buscador onSearch={handleSearch} />
+                <Buscador variant="home" onSearch={handleSearch} />
             </div>
             <div className="categories">
                 <div className="categories-text">
