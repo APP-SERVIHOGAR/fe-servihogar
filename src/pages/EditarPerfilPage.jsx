@@ -22,10 +22,12 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import SaveIcon from '@mui/icons-material/Save';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 function EditarPerfilPage() {
   const navigate = useNavigate();
-  const userId = 1; // En producción vendría de auth context
+  const { user, isAuthenticated } = useContext(AuthContext);
   
   const [loading, setLoading] = useState(true);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
@@ -52,9 +54,19 @@ function EditarPerfilPage() {
   // Errores de validación
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
+
   // Cargar perfil
   useEffect(() => {
-    fetch(`http://localhost:3000/perfil/${userId}`)
+    if (!user) return;
+
+    fetch(`http://localhost:3000/perfil/${user.id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    })
       .then(res => res.json())
       .then(data => {
         const provinciaId = data.localidad?.provincia?.id || '';
@@ -81,7 +93,7 @@ function EditarPerfilPage() {
         setSnackbar({ open: true, message: 'Error al cargar el perfil', severity: 'error' });
         setLoading(false);
       });
-  }, [userId]);
+  }, [user]);
 
   // Cargar provincias
   useEffect(() => {
@@ -141,21 +153,21 @@ function EditarPerfilPage() {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     // Nombre
     if (!formData.nombre) {
       newErrors.nombre = 'El nombre es requerido';
-    } else if (/\d/.test(formData.nombre)) {
-      newErrors.nombre = 'El nombre no puede contener números';
+    } else if (!/^[A-Za-z]+$/.test(formData.nombre)) {
+      newErrors.nombre = 'El nombre solo puede contener letras';
     }
-    
+
     // Apellido
     if (!formData.apellido) {
       newErrors.apellido = 'El apellido es requerido';
-    } else if (/\d/.test(formData.apellido)) {
-      newErrors.apellido = 'El apellido no puede contener números';
+    } else if (!/^[A-Za-z]+$/.test(formData.apellido)) {
+      newErrors.apellido = 'El apellido solo puede contener letras';
     }
-    
+
     // Teléfono
     if (formData.telefono && !/^\+?\d+$/.test(formData.telefono)) {
       newErrors.telefono = 'El teléfono debe contener solo números';
@@ -201,7 +213,7 @@ function EditarPerfilPage() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/perfil/${userId}`, {
+      const response = await fetch(`http://localhost:3000/perfil/${user.id}`, {
         method: 'PUT',
         body: formDataToSend
       });

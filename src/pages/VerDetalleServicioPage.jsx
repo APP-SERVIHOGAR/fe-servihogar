@@ -20,11 +20,16 @@ import {
 } from '@mui/material';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function DetalleServicioPage() {
   const { id } = useParams();
   const [servicio, setServicio] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   
   // Estados para la solicitud
   const [horariosSeleccionados, setHorariosSeleccionados] = useState({});
@@ -44,67 +49,99 @@ function DetalleServicioPage() {
       });
   }, [id]);
 
-  const handleHorarioChange = (diaId, franjaKey) => {
-    setHorariosSeleccionados(prev => {
-      const newState = { ...prev };
-      if (!newState[diaId]) {
-        newState[diaId] = [];
-      }
-      
-      if (newState[diaId].includes(franjaKey)) {
-        newState[diaId] = newState[diaId].filter(f => f !== franjaKey);
-        if (newState[diaId].length === 0) {
-          delete newState[diaId];
-        }
-      } else {
-        newState[diaId].push(franjaKey);
-      }
-      
-      return newState;
-    });
-  };
+  // Dentro de DetalleServicioPage
 
-  const handleSolicitar = () => {
-    // Validaciones
-    const hayHorariosSeleccionados = Object.keys(horariosSeleccionados).length > 0;
-    const hayDescripcion = descripcionProblema.trim() !== '';
+// Manejo de cambios de checkboxes: guardamos los IDs de las franjas
+const handleHorarioChange = (diaId, franjaId) => {
+  setHorariosSeleccionados(prev => {
+    const newState = { ...prev };
+    if (!newState[diaId]) newState[diaId] = [];
 
-    if (!hayHorariosSeleccionados) {
-      setSnackbar({
-        open: true,
-        message: 'Debe seleccionar al menos un día y horario',
-        severity: 'error'
-      });
-      return;
+    if (newState[diaId].includes(franjaId)) {
+      newState[diaId] = newState[diaId].filter(id => id !== franjaId);
+      if (newState[diaId].length === 0) delete newState[diaId];
+    } else {
+      newState[diaId].push(franjaId);
     }
 
-    if (!hayDescripcion) {
-      setSnackbar({
-        open: true,
-        message: 'Debe completar la descripción del problema',
-        severity: 'error'
-      });
-      return;
-    }
+    return newState;
+  });
+};
 
-    // Simular envío (aquí iría tu fetch al backend)
-    console.log('Enviando solicitud:', {
-      servicioId: id,
-      horarios: horariosSeleccionados,
-      descripcion: descripcionProblema
-    });
+// Manejo de la solicitud
+const handleSolicitar = async () => {
+  console.log("=== Inicia handleSolicitar ===");
+  console.log("Usuario:", user);
+  console.log("Horarios seleccionados:", horariosSeleccionados);
+  console.log("Descripción:", descripcionProblema);
 
-    // Simular respuesta exitosa
+  if (!user || !user.id) {
+    console.log("No hay usuario logueado");
     setSnackbar({
       open: true,
-      message: 'Solicitud enviada correctamente',
-      severity: 'success'
+      message: 'Debe iniciar sesión para solicitar el servicio',
+      severity: 'error'
+    });
+    return;
+  }
+
+  // Validaciones
+  const hayHorariosSeleccionados = Object.keys(horariosSeleccionados).length > 0;
+  const hayDescripcion = descripcionProblema.trim() !== '';
+
+  if (!hayHorariosSeleccionados) {
+    console.log("No hay horarios seleccionados");
+    setSnackbar({ open: true, message: 'Debe seleccionar al menos un día y horario', severity: 'error' });
+    return;
+  }
+
+  if (!hayDescripcion) {
+    console.log("No hay descripción");
+    setSnackbar({ open: true, message: 'Debe completar la descripción del problema', severity: 'error' });
+    return;
+  }
+
+  try {
+    // Crear array de IDs de franjas seleccionadas
+    const franjasSeleccionadas = [];
+    Object.values(horariosSeleccionados).forEach(arr => {
+      arr.forEach(franjaId => franjasSeleccionadas.push(franjaId));
     });
 
-    // Limpiar formulario
-    setHorariosSeleccionados({});
-    setDescripcionProblema('');
-  };
+    console.log("Franjas a enviar:", franjasSeleccionadas);
+
+    // Llamada al backend
+    const res = await fetch('http://localhost:3000/contratacion', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem("token")}` // si manejas auth
+      },
+      body: JSON.stringify({
+        id_usuario: user.id,
+        id_servicio: servicio.id,
+        descripcion: descripcionProblema,
+        franjas: franjasSeleccionadas
+      })
+    });
+
+    const data = await res.json();
+    console.log("Respuesta del backend:", data);
+
+    if (res.ok) {
+      setSnackbar({ open: true, message: data.mensaje || 'Solicitud enviada correctamente', severity: 'success' });
+      setHorariosSeleccionados({});
+      setDescripcionProblema('');
+    } else {
+      setSnackbar({ open: true, message: data.mensaje || 'Error al enviar solicitud', severity: 'error' });
+    }
+  } catch (err) {
+    console.error("Error en handleSolicitar:", err);
+    setSnackbar({ open: true, message: 'Error al enviar solicitud', severity: 'error' });
+  }
+};
+
+
 
   if (loading) {
     return (
@@ -156,8 +193,8 @@ function DetalleServicioPage() {
             </CardContent>
           </Card>
 
-          {/* Sección 2: Usuario publicante */}
-          <Card sx={{ mb: 3, bgcolor: "#ffffffee" }}>
+          <Card sx={{ mb: 3, bgcolor: "#ffffffee", cursor: 'pointer' }} 
+                onClick={() => navigate(`/perfil/${servicio.usuario.id}`)}>
             <CardContent sx={{ p: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Avatar 
@@ -183,6 +220,7 @@ function DetalleServicioPage() {
               </Box>
             </CardContent>
           </Card>
+
 
           {/* Sección 3: Galería de trabajos */}
           <Card sx={{ mb: 3, bgcolor: "#ffffffee" }}>
@@ -281,27 +319,22 @@ function DetalleServicioPage() {
                       {dia.nombre}
                     </Typography>
                     <FormGroup>
-                      {dia.franjas.map((franja, index) => {
-                        const franjaKey = `${franja.inicio}-${franja.fin}`;
-                        return (
-                          <FormControlLabel
-                            key={`${dia.idDia}-${index}`}
-                            control={
-                              <Checkbox 
-                                checked={horariosSeleccionados[dia.idDia]?.includes(franjaKey) || false}
-                                onChange={() => handleHorarioChange(dia.idDia, franjaKey)}
-                                sx={{
-                                  color: '#813ef5',
-                                  '&.Mui-checked': {
-                                    color: '#813ef5',
-                                  },
-                                }}
-                              />
-                            }
-                            label={`${franja.inicio} - ${franja.fin}`}
-                          />
-                        );
-                      })}
+                      {dia.franjas.map((franja, index) => (
+                        <FormControlLabel
+                          key={`${dia.idDia}-${index}`}
+                          control={
+                            <Checkbox
+                              checked={horariosSeleccionados[dia.idDia]?.includes(franja.id) || false}
+                              onChange={() => handleHorarioChange(dia.idDia, franja.id)}
+                              sx={{
+                                color: '#813ef5',
+                                '&.Mui-checked': { color: '#813ef5' },
+                              }}
+                            />
+                          }
+                          label={`${franja.inicio} - ${franja.fin}`}
+                        />
+                      ))}
                     </FormGroup>
                   </Box>
                 ))

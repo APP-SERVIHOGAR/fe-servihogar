@@ -7,6 +7,10 @@ import VerServicioPage from "./pages/VerServiciosPage";
 import VerDetalleServicioPage from "./pages/VerDetalleServicioPage";
 import MiPerfilPage from "./pages/MiPerfilPage";
 import EditarPerfilPage from "./pages/EditarPerfilPage";
+import EditarServicioPage from "./pages/EditarServicioPage";
+import ServiciosSolicitadosPage from "./pages/ServiciosSolicitadosPage";
+import MisContratacionesPage from "./pages/MisContratacionesPage";
+import PerfilPublicoPage from "./pages/PerfilPublicoPage";
 
 
 function App() {
@@ -22,6 +26,10 @@ function App() {
           <Route path="/servicio/:id" element={<VerDetalleServicioPage />} />
           <Route path="/perfil" element={<MiPerfilPage/>} />
           <Route path="/editarperfil" element={<EditarPerfilPage/>} />
+          <Route path="/editarservicio/:id" element={<EditarServicioPage/>} />
+          <Route path="/serviciosolicitados" element={<ServiciosSolicitadosPage/>} />
+          <Route path="/miscontrataciones" element={<MisContratacionesPage/>} />
+          <Route path="/perfil/:userId" element={<PerfilPublicoPage/>} />
       </Routes>
     </>
   );
