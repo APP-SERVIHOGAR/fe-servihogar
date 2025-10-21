@@ -283,20 +283,38 @@ export default function ServiciosSolicitadosPage() {
 
                 {/* Acciones */}
                 {c.estado === "finalizada" && (
-                  <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
-                    <Button
-                      variant="contained"
-                      sx={{ 
-                        bgcolor: "#813ef5", 
-                        "&:hover": { bgcolor: "#6d32d1" },
-                        textTransform: 'none',
-                        fontWeight: 600,
-                        px: 3
-                      }}
-                    >
-                      Valorar servicio
-                    </Button>
-                  </Box>
+                    <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+                        <Button
+                            // Si existe c.valoracion, el botón se deshabilita
+                            disabled={!!c.valoracion} 
+                            
+                            // Navega solo si NO está deshabilitado
+                            onClick={() => {
+                                if (!c.valoracion) {
+                                    navigate(`/valorarservicio/${c.id}/${c.servicio.id}`);
+                                }
+                            }}
+                            variant="contained"
+                            sx={{ 
+                                bgcolor: "#813ef5", 
+                                // Estilo para el hover cuando está deshabilitado
+                                "&:hover": { 
+                                    bgcolor: !c.valoracion ? "#6d32d1" : "rgba(129, 62, 245, 0.2)" 
+                                },
+                                // Estilo cuando está deshabilitado
+                                "&.Mui-disabled": {
+                                    bgcolor: "#c1c1c1", 
+                                    color: "#666"
+                                },
+                                textTransform: 'none',
+                                fontWeight: 600,
+                                px: 3
+                            }}
+                        >
+                            {/* Muestra un texto diferente si ya está valorado */}
+                            {c.valoracion ? 'Servicio valorado' : 'Valorar servicio'}
+                        </Button>
+                    </Box>
                 )}
               </CardContent>
             </Card>

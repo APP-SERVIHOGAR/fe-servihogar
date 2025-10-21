@@ -11,6 +11,7 @@ import EditarServicioPage from "./pages/EditarServicioPage";
 import ServiciosSolicitadosPage from "./pages/ServiciosSolicitadosPage";
 import MisContratacionesPage from "./pages/MisContratacionesPage";
 import PerfilPublicoPage from "./pages/PerfilPublicoPage";
+import ValorarServicio from "./pages/ValorarServicio";
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/serviciosolicitados" element={<ServiciosSolicitadosPage/>} />
           <Route path="/miscontrataciones" element={<MisContratacionesPage/>} />
           <Route path="/perfil/:userId" element={<PerfilPublicoPage/>} />
+          <Route path="/valorarservicio/:idContratacion/:idServicio" element={<ValorarServicio/>} />
       </Routes>
     </>
   );
