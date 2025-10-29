@@ -32,23 +32,24 @@ function Filtros({ onApply }) {
 
   const handleAplicar = () => {
     if (onApply) {
-      onApply({ categorias: categoriasSeleccionadas, calificaciones: calificacionesSeleccionadas });
+      onApply({
+        categorias: categoriasSeleccionadas,
+        calificaciones: calificacionesSeleccionadas.map(Number)
+      });
     }
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 3,
-        p: 2,
-        borderRadius: 2,
-        bgcolor: "#ffffffee",
-        boxShadow: 1,
-        minWidth: 200
-      }}
-    >
+    <Box sx={{
+      display: "flex",
+      flexDirection: "column",
+      gap: 3,
+      p: 2,
+      borderRadius: 2,
+      bgcolor: "#ffffffee",
+      boxShadow: 1,
+      minWidth: 200
+    }}>
       <Box>
         <Typography variant="subtitle1" sx={{ mb: 1 }}>Categorías:</Typography>
         <FormGroup>
@@ -87,7 +88,7 @@ function Filtros({ onApply }) {
               onClick={() => handleCalificacionChange(valor)}
               startIcon={Array.from({length: valor}).map((_,i) => <StarIcon key={i} fontSize="small" />)}
             >
-              {valor} estrellas
+              {valor} estrella{valor > 1 ? "s" : ""}
             </Button>
           ))}
         </FormGroup>
@@ -95,11 +96,7 @@ function Filtros({ onApply }) {
 
       <Button
         variant="contained"
-        sx={{
-          bgcolor: "#813ef5",
-          "&:hover": { bgcolor: "#5409DA" },
-          mt: 1
-        }}
+        sx={{ bgcolor: "#813ef5", "&:hover": { bgcolor: "#5409DA" }, mt: 1 }}
         onClick={handleAplicar}
       >
         Aplicar filtros
