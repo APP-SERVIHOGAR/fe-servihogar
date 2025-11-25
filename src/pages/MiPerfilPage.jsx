@@ -161,7 +161,7 @@ function MiPerfilPage() {
           ) : (
             <Grid container spacing={3}>
               {servicios.map((servicio) => (
-                <Grid item xs={12} sm={6} md={4} key={servicio.id}>
+                <Grid size={{ xs: 12, sm: 6, md:4}} key={servicio.id}>
                   <Card sx={{ 
                     height: '100%', 
                     display: 'flex', 
