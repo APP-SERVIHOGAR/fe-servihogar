@@ -81,10 +81,9 @@ function VerServicioPage() {
     fetch(`http://localhost:3000/servicio/buscar?${queryString.toString()}`)
       .then(res => res.json())
       .then(data => {
-        console.log("📦 Datos recibidos:", data);
         setServicios(data);
       })
-      .catch(err => console.error("❌ Error al cargar servicios:", err));
+      .catch(err => console.error("Error al cargar servicios:", err));
   }, [location.search]);
 
   // 🔹 Ordenamiento visual en frontend

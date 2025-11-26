@@ -4,7 +4,7 @@ import "../styles/styleHome.css";
 import { FaWater, FaBolt, FaLock, FaCode, FaCut } from "react-icons/fa";
 import { MdCleaningServices } from "react-icons/md";
 
-function Home () {
+function HomePage () {
     const handleSearch = (filtros) => {
         console.log("Filtros buscados:", filtros);
     };
@@ -55,4 +55,4 @@ function Home () {
     )
 }
 
-export default Home;
+export default HomePage;
